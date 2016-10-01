@@ -1,9 +1,10 @@
 /*
  * @author Wilmer Guerra
  */
-
 package Guerra_Assignment3;
+
 import java.util.Scanner;
+import java.text.NumberFormat;
 
 class atmSession
 {
@@ -13,8 +14,7 @@ class atmSession
     private final String password;
     private String first_name;
     private String last_name;
-    private float balance;
-
+    private double balance;
 
     public atmSession()
     {
@@ -45,17 +45,17 @@ class atmSession
         return (accountNumber.equals(this.accountNumber) && password.equals(this.password));
     }
 
-    public void deposit(float amount)
+    public void deposit(double amount)
     {
         this.balance += amount;
     }
 
-    public void withdrawl(float amount)
+    public void withdrawl(double amount)
     {
         this.balance -= amount;
     }
 
-    public float getBalance()
+    public double getBalance()
     {
         return this.balance;
     }
@@ -63,6 +63,11 @@ class atmSession
     public String getName()
     {
         return this.last_name + ", " + this.first_name;
+    }
+
+    public String getFirstName()
+    {
+        return this.first_name;
     }
 
     public String getAccountNumber()
@@ -73,15 +78,26 @@ class atmSession
 
 public class Guerra_Assignment3
 {
-
     public static void main(String[] args) {
-        String userNumber, userPassword;
-        boolean success = false;
         int choice;
-        float depositAmount = 0, withdrawAmount = 0;
+        boolean success = false;
+        double depositAmount = 0, withdrawAmount = 0;
+        atmSession login;
+        String userNumber, userPassword, firstName, lastName, fullName;
         Scanner input = new Scanner(System.in);
+        NumberFormat defaultFormat = NumberFormat.getCurrencyInstance();
 
-        atmSession login = new atmSession("Wilmer", "Guerra");
+        // Two versions of program: With name or no name
+        System.out.println("Do you want to do the full version? (y/n)");
+        if(input.nextLine().equalsIgnoreCase("y")) {
+            System.out.println("Before we begin, can I get your first name: ");
+            firstName = input.nextLine();
+            System.out.println("Now your last name: ");
+            lastName = input.nextLine();
+            login = new atmSession(firstName, lastName);
+        } else {
+            login = new atmSession();
+        }
 
         // Ok, lets try logging in
         do {
@@ -107,9 +123,7 @@ public class Guerra_Assignment3
 
         do {
             // If we're here, that means we've logged in
-
             printOptions();
-
             // validating user input
             do {
                 System.out.print("Your Choice: ");
@@ -120,7 +134,9 @@ public class Guerra_Assignment3
             } while (choice == 0 || choice > 4);
             printMainHeaders();
 
+            // User gave us a valid choice, now let's direct them to the right menu
             switch (choice) {
+                // Deposit
                 case 1:
                     do {
                         if (depositAmount <= -1) {
@@ -135,24 +151,22 @@ public class Guerra_Assignment3
                             depositScreen();
                         }
                         depositAmount = input.nextFloat();
-                        // Making sure the user doesn't take more than what they have
-                        if(depositAmount > login.getBalance()) {
-                            System.out.println("You can't withdraw more than your total balance! Try again");
-                            depositAmount = 0;
-                        }
+
                     } while (depositAmount < 0);
 
                     // If we're here, that means user input was a positive float
                     login.deposit(depositAmount);
                     printMainHeaders();
-                    System.out.println(depositAmount + "\nhas been deposited into your account");
-                    System.out.println("The current balance is: " + login.getBalance());
+                    System.out.println(defaultFormat.format(depositAmount) + "\nhas been deposited into your account");
+                    System.out.println("The current balance is: " + defaultFormat.format(login.getBalance()));
                     break;
+                // Withdraw
                 case 2:
                     do {
                         if(withdrawAmount <= -1){
                             printMainHeaders();
                             System.out.print("Input Error! Please Try Again!");
+                            withdrawScreen();
                         }
                         withdrawScreen();
                         while(!input.hasNextFloat()){
@@ -163,18 +177,27 @@ public class Guerra_Assignment3
                         }
 
                         withdrawAmount = input.nextFloat();
-                    } while(withdrawAmount < 0);
+
+                        // Making sure the user doesn't take more than what they have
+                        while(withdrawAmount > login.getBalance()) {
+                            System.out.println("You can't withdraw more than your total balance! Try again");
+                            withdrawAmount = 0;
+                        }
+                    } while(withdrawAmount <= 0);
 
                     login.withdrawl(withdrawAmount);
                     printMainHeaders();
-                    System.out.println(withdrawAmount + "\nhas been withdrawn from your account");
-                    System.out.println("The current balance is: " + login.getBalance());
+                    System.out.println(defaultFormat.format(withdrawAmount) + "\nhas been withdrawn from your account");
+                    System.out.println("The current balance is: " + defaultFormat.format(login.getBalance()));
                     break;
+                // Print Statement
                 case 3:
-                    printStatement(login.getName(), login.getAccountNumber(), login.getBalance());
+                    fullName = (login.getFirstName() == null) ? "No Name Provided" : login.getName();
+                    printStatement(fullName, login.getAccountNumber(), defaultFormat.format(login.getBalance()));
                     printMainHeaders();
                     System.out.println("The bank statement has been created\n");
                     break;
+                // Exit ATM
                 case 4:
                     printMainHeaders();
                     System.out.println("Thank you for banking with us!");
@@ -245,12 +268,12 @@ public class Guerra_Assignment3
 
     private static void withdrawScreen()
     {
-        System.out.println("Please enter the amount of withdrawl in US dollars:");
+        System.out.println("Please enter the amount to withdraw in US dollars:");
         System.out.println("(In Example: 89.75)");
         System.out.print("$: ");
     }
 
-    private static void printStatement(String name, String accountNumber, float currentBalance)
+    private static void printStatement(String name, String accountNumber, String currentBalance)
     {
         System.out.println("CSIS114 Bank\n\n");
         printMainHeaders();
