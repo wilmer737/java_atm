@@ -1,5 +1,8 @@
 /*
  * @author Wilmer Guerra
+ * Simple ATM Program
+ * account number: 000114
+ * password: 114
  */
 package Guerra_Assignment3;
 
@@ -8,6 +11,7 @@ import java.text.NumberFormat;
 
 class atmSession
 {
+
     private int attempt;
     // I made accountNumber and password a string because normally they are in the real world
     private final  String accountNumber;
@@ -90,7 +94,7 @@ public class Guerra_Assignment3
         // Two versions of program: With name or no name
         System.out.println("Do you want to do the full version? (y/n)");
         if(input.nextLine().equalsIgnoreCase("y")) {
-            System.out.println("Before we begin, can I get your first name: ");
+            System.out.println("Can I get your first name: ");
             firstName = input.nextLine();
             System.out.println("Now your last name: ");
             lastName = input.nextLine();
@@ -211,7 +215,11 @@ public class Guerra_Assignment3
         } while(choice != 4);
     }
 
-
+    /**
+     * Prints Number of attempts
+     * @param attempts Number of attempts
+     * @return Formatted Number of attempts
+     */
     private static String printAttempts(int attempts)
     {
         String returnStatement;
@@ -234,6 +242,9 @@ public class Guerra_Assignment3
         return returnStatement;
     }
 
+    /**
+     * Prints Exit Message
+     */
     private static void printExitMessage()
     {
         System.out.println("The account number and password don't match!");
@@ -242,16 +253,25 @@ public class Guerra_Assignment3
         printMainHeaders();
     }
 
+    /**
+     * Prints Main Headers
+     */
     private static void printMainHeaders()
     {
         System.out.println("======================================");
     }
 
+    /**
+     * Prints Small Headers
+     */
     private static void printMiniHeaders()
     {
         System.out.println("--------------------------------------");
     }
 
+    /**
+     * Prints Main Menu
+     */
     private static void printOptions()
     {
         System.out.println("Welcome to the Palomar CSCI114 ATM");
@@ -259,6 +279,9 @@ public class Guerra_Assignment3
         System.out.println("1. Deposit Cash\n2. Withdraw Cash\n3. Print Statement\n4. Exit");
     }
 
+    /**
+     * Prints Deposit Screen
+     */
     private static void depositScreen()
     {
         System.out.println("Please enter the amount of deposit in US dollars:");
@@ -266,6 +289,9 @@ public class Guerra_Assignment3
         System.out.print("$: ");
     }
 
+    /**
+     * Prints Withdraw Screen
+     */
     private static void withdrawScreen()
     {
         System.out.println("Please enter the amount to withdraw in US dollars:");
@@ -273,6 +299,12 @@ public class Guerra_Assignment3
         System.out.print("$: ");
     }
 
+    /**
+     *
+     * @param name Formatted Name
+     * @param accountNumber Account Number
+     * @param currentBalance Formatted Balance
+     */
     private static void printStatement(String name, String accountNumber, String currentBalance)
     {
         System.out.println("CSIS114 Bank\n\n");
@@ -284,5 +316,4 @@ public class Guerra_Assignment3
         System.out.println("CSIS114 Bank");
         System.out.println("Member of FDIC, Equal Housing Lender!");
     }
-
 }
