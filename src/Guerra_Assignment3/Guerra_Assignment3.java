@@ -213,6 +213,7 @@ public class Guerra_Assignment3
                 default:
             }
         } while(choice != 4);
+        input.close();
     }
 
     /**
