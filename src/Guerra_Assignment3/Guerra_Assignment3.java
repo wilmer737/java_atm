@@ -11,7 +11,6 @@ import java.text.NumberFormat;
 
 class atmSession
 {
-
     private int attempt;
     // I made accountNumber and password a string because normally they are in the real world
     private final  String accountNumber;
@@ -107,7 +106,7 @@ public class Guerra_Assignment3
         do {
             // First lets check if this is the fourth attempt, if it is, print exit message and exit program
             if (login.getAttempts() == 4) {
-                printExitMessage();
+                printFailedLoginMessage();
                 System.exit(0);
             }
 
@@ -246,7 +245,7 @@ public class Guerra_Assignment3
     /**
      * Prints Exit Message
      */
-    private static void printExitMessage()
+    private static void printFailedLoginMessage()
     {
         System.out.println("The account number and password don't match!");
         System.out.println("Please make sure you have the correct account number and password");
